@@ -1,11 +1,32 @@
-import  cv2
+import cv2
 import mediapipe as mp
 import time
 
 cap = cv2.VideoCapture(0)
 
+mpHands = mp.solutions.hands
+hands = mpHands.Hands()
+mpDraw = mp.solutions.drawing_utils
+
+pTime = time.time()  # Initialize previous time outside the loop
+
 while True:
     success, img = cap.read()
+    if not success:
+        break
 
-    cv2.imshow("Image", img)
+    imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    results = hands.process(imgRGB)
+    # print(results.multi_hand_landmarks)
+    if results.multi_hand_landmarks:
+        for handLms in results.multi_hand_landmarks:
+            mpDraw.draw_landmarks(img, handLms, mpHands.HAND_CONNECTIONS)
+
+    cTime = time.time()
+    fps = 1 / (cTime - pTime) if (cTime - pTime) != 0 else 0
+    pTime = cTime  # Update previous time after calculating FPS
+
+    cv2.putText(img, str(int(fps)), (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+
+    cv2.imshow('Image', img)
     cv2.waitKey(1)
