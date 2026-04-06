@@ -10,7 +10,7 @@ detector = htm.handDectector()
 while True:
     success, img = cap.read()
     detector.findHands(img)
-    lmlist = detector.findPosition(img)
+    lmlist = detector.findPosition(img, draw=False)
     if len(lmlist):
         print(lmlist[4])
     cTime = time.time()
