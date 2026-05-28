@@ -31,4 +31,3 @@ In this project, I built a gesture-based volume controller using hand landmark d
 
 > **Note:** Audio control via `pycaw` is Windows-only. The hand tracking module works cross-platform.
 
-## Project Structure
